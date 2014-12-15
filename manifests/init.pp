@@ -37,8 +37,13 @@
 #   The configuration file path for kdump.
 #   Default: OS dependent
 #
+<<<<<<< HEAD
 # [*kernel_parameter_provider*]
 #   The provider property for the kernel_parameter defined type.
+=======
+# [*sysconfig_file*]
+#   The sysconfig file path for kdump.
+>>>>>>> Initial sysconfig/kdump file defintion
 #   Default: OS dependent
 #
 # === Variables
@@ -65,16 +70,17 @@
 # Copyright 2013 Trey Dockendorf
 #
 class kdump (
-  $enable                    = false,
-  $crashkernel               = 'auto',
-  $crashkernel_bootmode      = 'all',
-  $bootloader_config_path    = undef,
-  $package_name              = $kdump::params::package_name,
-  $service_name              = $kdump::params::service_name,
-  $service_hasstatus         = $kdump::params::service_hasstatus,
-  $service_hasrestart        = $kdump::params::service_hasrestart,
-  $config_path               = $kdump::params::config_path,
-  $config_overrides          = {},
+  $enable                 = false,
+  $crashkernel            = 'auto',
+  $crashkernel_bootmode   = 'all',
+  $bootloader_config_path = undef,
+  $package_name           = $kdump::params::package_name,
+  $service_name           = $kdump::params::service_name,
+  $service_hasstatus      = $kdump::params::service_hasstatus,
+  $service_hasrestart     = $kdump::params::service_hasrestart,
+  $config_path            = $kdump::params::config_path,
+  $sysconfig_file         = $kdump::params::sysconfig_file,
+  $config_overrides       = {},
   $kernel_parameter_provider = $kdump::params::kernel_parameter_provider,
 ) inherits kdump::params {
 
@@ -112,6 +118,16 @@ class kdump (
       ensure  => present,
       path    => $config_path,
       content => template('kdump/kdump.conf.erb'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      notify  => Service['kdump'],
+    }
+
+    file { '/etc/sysconfig/kdump':
+      ensure  => present,
+      path    => $sysconfig_file,
+      content => template('kdump/sysconfig.kdump.erb'),
       owner   => 'root',
       group   => 'root',
       mode    => '0644',

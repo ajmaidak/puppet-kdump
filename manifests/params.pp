@@ -21,7 +21,7 @@ class kdump::params {
       $service_hasstatus  = true
       $service_hasrestart = true
       $config_path        = '/etc/kdump.conf'
-      $sysconfig_path     = '/etc/sysconfig/kdump'
+      $sysconfig_file     = '/etc/sysconfig/kdump'
 
       $config_defaults = {
         'path'              => '/var/crash',
@@ -81,4 +81,8 @@ class kdump::params {
       fail("Unsupported osfamily: ${::osfamily}, module ${module_name} only support osfamily RedHat")
     }
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> Initial sysconfig/kdump file defintion
 }
