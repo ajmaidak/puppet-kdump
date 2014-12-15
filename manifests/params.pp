@@ -21,6 +21,7 @@ class kdump::params {
       $service_hasstatus  = true
       $service_hasrestart = true
       $config_path        = '/etc/kdump.conf'
+      $sysconfig_path     = '/etc/sysconfig/kdump'
 
       $config_defaults = {
         'path'              => '/var/crash',
@@ -53,11 +54,31 @@ class kdump::params {
       } else {
         $kernel_parameter_provider = 'grub'
       }
-    }
 
+      $kdump_kernelver   = ''
+      $kdump_commandline = ''
+      $kdump_bootdir     = '/boot'
+      $kdump_img         = 'vmlinuz'
+      $kdump_img_ext     =  ''
+      case $::lsbmajdistrelease {
+        '5': {
+          $kexec_args = ' --args-linux'
+        }
+        '6': {
+          $kexec_args = ''
+          case $::architecture {
+            'i386':   { $kdump_commandline_append = 'irqpoll nr_cpus=1 reset_devices cgroup_disable=memory' }
+            'x86_64': { $kdump_commandline_append = 'irqpoll nr_cpus=1 reset_devices cgroup_disable=memory mce=off' }
+          }
+          $mkdumprd_args = $::virtual ? { 
+            'vmware' => '--builtin=vsock --builtin=vmci',
+            default  => '',
+          } 
+        }
+      }
+    }
     default: {
       fail("Unsupported osfamily: ${::osfamily}, module ${module_name} only support osfamily RedHat")
     }
   }
-
 }
