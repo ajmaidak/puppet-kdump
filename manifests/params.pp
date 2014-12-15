@@ -62,7 +62,9 @@ class kdump::params {
       $kdump_img_ext     =  ''
       case $::lsbmajdistrelease {
         '5': {
-          $kexec_args = ' --args-linux'
+          $kexec_args               = ' --args-linux'
+          $kdump_commandline_append = 'irqpoll maxcpus=1'
+          $mkdumprd_args            = undef
         }
         '6': {
           $kexec_args = ''
@@ -75,14 +77,13 @@ class kdump::params {
             default  => '',
           } 
         }
+        default: {
+          fail("Unsupported Redhat Release $::lsbmajdistrelease,  module ${module_name} only support lsbmajdistrelease 5 and 6")
+        }
       }
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily}, module ${module_name} only support osfamily RedHat")
     }
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> Initial sysconfig/kdump file defintion
 }
