@@ -71,14 +71,15 @@ class kdump::params {
           case $::architecture {
             'i386':   { $kdump_commandline_append = 'irqpoll nr_cpus=1 reset_devices cgroup_disable=memory' }
             'x86_64': { $kdump_commandline_append = 'irqpoll nr_cpus=1 reset_devices cgroup_disable=memory mce=off' }
+            default:  { fail("Unsupported architecture ${::architecture}, module ${module_name} only support architecture i386 and x86_64") }
           }
-          $mkdumprd_args = $::virtual ? { 
+          $mkdumprd_args = $::virtual ? {
             'vmware' => '--builtin=vsock --builtin=vmci',
             default  => '',
-          } 
+          }
         }
         default: {
-          fail("Unsupported Redhat Release $::lsbmajdistrelease,  module ${module_name} only support lsbmajdistrelease 5 and 6")
+          fail("Unsupported Redhat Release ${::lsbmajdistrelease},  module ${module_name} only support lsbmajdistrelease 5 and 6")
         }
       }
     }

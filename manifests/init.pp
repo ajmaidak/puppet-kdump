@@ -37,13 +37,11 @@
 #   The configuration file path for kdump.
 #   Default: OS dependent
 #
-<<<<<<< HEAD
 # [*kernel_parameter_provider*]
 #   The provider property for the kernel_parameter defined type.
-=======
+#
 # [*sysconfig_file*]
 #   The sysconfig file path for kdump.
->>>>>>> Initial sysconfig/kdump file defintion
 #   Default: OS dependent
 #
 # === Variables
@@ -70,18 +68,26 @@
 # Copyright 2013 Trey Dockendorf
 #
 class kdump (
-  $enable                 = false,
-  $crashkernel            = 'auto',
-  $crashkernel_bootmode   = 'all',
-  $bootloader_config_path = undef,
-  $package_name           = $kdump::params::package_name,
-  $service_name           = $kdump::params::service_name,
-  $service_hasstatus      = $kdump::params::service_hasstatus,
-  $service_hasrestart     = $kdump::params::service_hasrestart,
-  $config_path            = $kdump::params::config_path,
-  $sysconfig_file         = $kdump::params::sysconfig_file,
-  $config_overrides       = {},
+  $enable                   = false,
+  $crashkernel              = 'auto',
+  $crashkernel_bootmode     = 'all',
+  $bootloader_config_path   = undef,
+  $package_name             = $kdump::params::package_name,
+  $service_name             = $kdump::params::service_name,
+  $service_hasstatus        = $kdump::params::service_hasstatus,
+  $service_hasrestart       = $kdump::params::service_hasrestart,
+  $config_path              = $kdump::params::config_path,
+  $sysconfig_file           = $kdump::params::sysconfig_file,
+  $config_overrides         = {},
   $kernel_parameter_provider = $kdump::params::kernel_parameter_provider,
+  $kdump_kernelver          = $kdump::params::kdump_kernelver,
+  $kdump_commandline        = $kdump::params::kdump_commandline,
+  $kdump_bootdir            = $kdump::params::kdump_bootdir,
+  $kdump_img                = $kdump::params::kdump_img,
+  $kdump_img_ext            = $kdump::params::kdump_img_ext,
+  $kexec_args               = $kdump::params::kexec_args,
+  $kdump_commandline_append = $kdump::params::kdump_commandline_append,
+  $mkdumprd_args            = $kdump::params::mkdumprd_args,
 ) inherits kdump::params {
 
   validate_bool($enable)
